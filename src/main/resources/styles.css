@@ -1,0 +1,103 @@
+/* styles.css */
+
+/* Style for larger and bold labels ("Select input file", "Select output file") */
+.label-main {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Adjust spacing between "Drag and drop file here" and the file selection box */
+.section-spacing {
+    -fx-spacing: 5px; /* Reduced space between elements */
+}
+
+/* Adjust spacing between elements inside the HBox */
+.hbox-spacing {
+    -fx-spacing: 5px; /* Reduce the spacing inside the HBox */
+}
+
+/* General button styles */
+.button {
+    -fx-text-fill: -fx-text-base-color;
+}
+
+/* Style for the pastel green Process button */
+.button-process {
+    -fx-background-color:
+        -fx-shadow-highlight-color,
+        -fx-outer-border,
+        -fx-inner-border,
+        #a8d5ba; /* Pastel green background */
+}
+.button-process:hover {
+    -fx-background-color:
+        -fx-shadow-highlight-color,
+        -fx-outer-border,
+        -fx-inner-border,
+        #b8dcbf; /* Lighter pastel green for hover */
+}
+.button-process:focused {
+    -fx-background-color:
+            -fx-focus-color,
+            -fx-inner-border,
+            -fx-body-color,
+            -fx-faint-focus-color,
+            -fx-body-color,
+            #a8d5ba;
+        -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+        -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+/* Style for the pastel yellow Save EXCEL button */
+.button-save {
+    -fx-background-color:
+        -fx-shadow-highlight-color,
+        -fx-outer-border,
+        -fx-inner-border,
+        #f3e5ab; /* Pastel yellow background */
+}
+.button-save:hover {
+    -fx-background-color:
+        -fx-shadow-highlight-color,
+        -fx-outer-border,
+        -fx-inner-border,
+        #f7e9b5; /* Lighter pastel yellow for hover */
+}
+.button-save:focused {
+-fx-background-color:
+        -fx-focus-color,
+        -fx-inner-border,
+        -fx-body-color,
+        -fx-faint-focus-color,
+        -fx-body-color,
+        #f3e5ab;
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+/* Style for the pastel red Exit button */
+.button-exit {
+    -fx-background-color:
+        -fx-shadow-highlight-color,
+        -fx-outer-border,
+        -fx-inner-border,
+        #f7a4a4; /* Pastel red background */
+}
+.button-exit:hover {
+    -fx-background-color:
+        -fx-shadow-highlight-color,
+        -fx-outer-border,
+        -fx-inner-border,
+        #f8b6b6; /* Lighter pastel red for hover */
+}
+.button-exit:focused {
+    -fx-background-color:
+        -fx-focus-color,
+        -fx-inner-border,
+        -fx-body-color,
+        -fx-faint-focus-color,
+        -fx-body-color,
+        #f7a4a4;
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
