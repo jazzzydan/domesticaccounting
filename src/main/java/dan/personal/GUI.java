@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GUI extends Application {
@@ -77,28 +78,22 @@ public class GUI extends Application {
 
         // Input Section
         // Create a VBox containing the main and secondary labels for the input file section
-        VBox inputVBox = createLabelSection("Select input *.csv file"
-        );
+        VBox inputVBox = createLabelSection("Select input *.csv file");
 
         // Create an HBox with a Browse button and a text field for the input file selection
         inputFilePathTextField = new TextField(); // Create a text field for displaying the input file path
-        HBox inputHBox = createFileSelectionSection(
-                inputFilePathTextField,
-                this::handleInputFileSelection);
+        HBox inputHBox = createFileSelectionSection(inputFilePathTextField, this::handleInputFileSelection);
 
         // Set up drag-and-drop functionality for inputVBox
         setupDragAndDrop(inputVBox, inputFilePathTextField, "csv");
 
         // Output Section
         // Create a VBox containing the main and secondary labels for the output file section
-        VBox outputVBox = createLabelSection("Select output *.xlsx file"
-        );
+        VBox outputVBox = createLabelSection("Select output *.xlsx file");
 
         // Create an HBox with a Browse button and a text field for the output file selection
         outputFilePathTextField = new TextField();
-        HBox outputHBox = createFileSelectionSection(
-                outputFilePathTextField,
-                this::handleOutputFileSelection);
+        HBox outputHBox = createFileSelectionSection(outputFilePathTextField, this::handleOutputFileSelection);
 
         // Set up drag-and-drop functionality for outputVBox
         setupDragAndDrop(outputVBox, outputFilePathTextField, "xlsx");
@@ -274,8 +269,9 @@ public class GUI extends Application {
 
     // Dummy event handlers for buttons (replace with actual logic)
     private void handleProcessAction() {
-        // Logic for processing
-        System.out.println("Process button clicked.");
+        CSVReader csvReader = new CSVReader(this);
+        InputTable inputTable = new InputTable(csvReader.readCSV());
+        inputTable.getTable();
     }
 
     private void handleSaveAction() {
@@ -289,13 +285,9 @@ public class GUI extends Application {
         grid.setHgap(20);
         grid.setVgap(20);
 
-        Button btnSubmit = new Button("Submit");
-        btnSubmit.setOnAction(e -> {
-            CSVParser csvParser = new CSVParser(this);
-            csvParser.readCSV();
-        });
-
-        grid.add(btnSubmit, 0, 0);
+        // Create an empty ArrayList if the CSV file is not processed yet
+        InputTable inputTable = new InputTable(new ArrayList<>());
+        grid.add(inputTable.getTable(), 0, 0);
 
         return grid; // Return a new GridPane instance
     }

@@ -11,54 +11,42 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class CSVParser {
+public class CSVReader {
 
-    // Path to the CSV file
-    private String filePath;
     private GUI gui;
 
-    // Class fields to hold the parsed data
-    private String account;
-    private String documentNumber;
-    private Date date;
-    private String beneficiarysAccount;
-    private String beneficiarysName;
-    private String BICSWIFT;
-    private String type;
-    private String DC;
-    private int amount;
-    private String referenceNumber;
-    private String archiveID;
-    private String description;
-    private int commissionFee;
-    private String currency;
-    private String IDRegistryCode;
-
     // Constructor to accept GUI instance
-    public CSVParser(GUI gui) {
+    public CSVReader(GUI gui) {
         this.gui = gui;
     }
 
     /**
      * Reads the CSV file and parses its content into class fields.
      */
-    public void readCSV() {
+    public ArrayList<BankTransaction> readCSV() {
 
-        filePath = gui.getInputFilePathTextField().getText(); // Get the file path from the GUI
+        ArrayList<BankTransaction> bankTransactions = new ArrayList<>();
+
+        // Path to the CSV file
+        String filePath = gui.getInputFilePathTextField().getText(); // Get the file path from the GUI
 
         //TODO: update logging functionality
-        if (filePath == null) {
-            System.err.println("File path is null.");
-            return;
-        }
-        if (filePath.isEmpty()) {
-            System.err.println("File path is empty.");
-            return;
-        }
+//        if (filePath == null) {
+//            System.err.println("File path is null.");
+//            return;
+//        }
+//        if (filePath.isEmpty()) {
+//            System.err.println("File path is empty.");
+//            return;
+//        }
 
+        //TODO: transfer the following code to a logger class
         System.out.println("Reading CSV file: " + filePath);
+
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
             // Read first line to handle BOM if it exists
             String firstLine = bufferedReader.readLine();
@@ -93,24 +81,24 @@ public class CSVParser {
 
             for (CSVRecord record : csvParser) {
                 try {
+                    BankTransaction bankTransaction = new BankTransaction();
                     // Access and parse values by header names
-                    account = record.get("Kliendi konto");
-                    documentNumber = record.get("Dokumendi number");
-                    date = dateFormat.parse(record.get("Kuupäev")); // Parse date with the correct format
-                    beneficiarysAccount = getOrDefault(record.get("Saaja/maksja konto"), "N/A");
-                    beneficiarysName = getOrDefault(record.get("Saaja/maksja nimi"), "N/A");
-                    BICSWIFT = record.get("Saaja panga kood");
-                    type = record.get("Tüüp");
-                    DC = record.get("Deebet/Kreedit (D/C)");
-                    amount = parseAmount(record.get("Summa")); // Convert amount to cents
-                    referenceNumber = getOrDefault(record.get("Viitenumber"), "N/A");
-                    archiveID = record.get("Arhiveerimistunnus");
-                    description = record.get("Selgitus");
-                    commissionFee = parseAmount(record.get("Teenustasu")); // Convert commission fee to cents
-                    currency = record.get("Valuuta");
+                    bankTransaction.setAccount(record.get("Kliendi konto"));
+                    bankTransaction.setDocumentNumber(record.get("Dokumendi number"));
+                    bankTransaction.setDate(dateFormat.parse(record.get("Kuupäev"))); // Parse date with the correct format
+                    bankTransaction.setBeneficiarysAccount(getOrDefault(record.get("Saaja/maksja konto"), "N/A"));
+                    bankTransaction.setBeneficiarysName(getOrDefault(record.get("Saaja/maksja nimi"), "N/A"));
+                    bankTransaction.setBICSWIFT(record.get("Saaja panga kood"));
+                    bankTransaction.setType(record.get("Tüüp"));
+                    bankTransaction.setDC(record.get("Deebet/Kreedit (D/C)"));
+                    bankTransaction.setAmount(parseAmount(record.get("Summa"))); // Convert amount to cents
+                    bankTransaction.setReferenceNumber(getOrDefault(record.get("Viitenumber"), "N/A"));
+                    bankTransaction.setArchiveID(record.get("Arhiveerimistunnus"));
+                    bankTransaction.setDescription(record.get("Selgitus"));
+                    bankTransaction.setCommissionFee(parseAmount(record.get("Teenustasu"))); // Convert commission fee to cents
+                    bankTransaction.setCurrency(record.get("Valuuta"));
 
-                    // Print the object details for debugging
-                    System.out.println(this);
+                    bankTransactions.add(bankTransaction);
                 } catch (ParseException e) {
                     // Handle date parsing errors
                     e.printStackTrace();
@@ -121,6 +109,8 @@ public class CSVParser {
             // Handle file I/O errors
             e.printStackTrace();
         }
+
+        return bankTransactions;
     }
 
     /**
@@ -152,10 +142,10 @@ public class CSVParser {
         return (value == null || value.trim().isEmpty()) ? defaultValue : value;
     }
 
-    @Override
-    public String toString() {
-        // Format the object details for output
-        return String.format("InputTable {account='%s', documentNumber='%s', date=%s, beneficiarysAccount='%s', beneficiarysName='%s', BICSWIFT='%s', type='%s', DC='%s', amount=%d, referenceNumber='%s', archiveID='%s', description='%s', commissionFee=%d, currency='%s', IDRegistryCode='%s'}",
-                account, documentNumber, date, beneficiarysAccount, beneficiarysName, BICSWIFT, type, DC, amount, referenceNumber, archiveID, description, commissionFee, currency, IDRegistryCode);
-    }
+//    @Override
+//    public String toString() {
+//        // Format the object details for output
+//        return String.format("InputTable {account='%s', documentNumber='%s', date=%s, beneficiarysAccount='%s', beneficiarysName='%s', BICSWIFT='%s', type='%s', DC='%s', amount=%d, referenceNumber='%s', archiveID='%s', description='%s', commissionFee=%d, currency='%s', IDRegistryCode='%s'}",
+//                account, documentNumber, date, beneficiarysAccount, beneficiarysName, BICSWIFT, type, DC, amount, referenceNumber, archiveID, description, commissionFee, currency, IDRegistryCode);
+//    }
 }
